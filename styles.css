@@ -1,0 +1,188 @@
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #000;
+    background: #fff;
+}
+
+/* Typography */
+h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.tagline {
+    font-size: 1.25rem;
+    color: #666;
+}
+
+/* Layout */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 250px;
+    height: 100vh;
+    background: #f5f5f5;
+    border-right: 1px solid #000;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    margin-bottom: 2rem;
+}
+
+main {
+    margin-left: 250px;
+    max-width: 800px;
+    padding: 2rem;
+}
+
+section {
+    padding: 2rem;
+    margin-bottom: 2rem;
+    background: #fff;
+    border: 1px solid #000;
+}
+
+/* Navigation */
+nav ul {
+    list-style: none !important;
+    padding-left: 0;
+}
+
+nav li {
+    position: relative;
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+}
+
+nav li::before {
+    content: ">";
+    position: absolute;
+    left: 0;
+    color: #666;
+}
+
+nav a {
+    display: block;
+    padding: 0.5rem 0;
+    color: #000;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+nav a:hover {
+    background: #000;
+    color: #fff;
+}
+
+/* Lists */
+ul, ol {
+    list-style: none !important;
+    padding-left: 1.5rem;
+    margin: 0;
+}
+
+li {
+    position: relative;
+    margin-bottom: 0.5rem;
+    list-style: none !important;
+}
+
+li::before {
+    content: ">";
+    position: absolute;
+    left: -1.5rem;
+    color: #666;
+}
+
+/* Links */
+a {
+    color: #000;
+    text-decoration: underline;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Mobile Menu */
+.mobile-menu-toggle {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background: #000;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        width: 80%;
+        max-width: 300px;
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    main {
+        margin-left: 0;
+        padding: 1rem;
+    }
+
+    .mobile-menu-toggle {
+        display: block;
+    }
+
+    section {
+        padding: 1rem;
+    }
+
+    h1, h2 {
+        text-align: center;
+    }
+}
+
+/* Animations */
+section {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+section.active {
+    opacity: 1;
+    transform: translateY(0);
+} 
