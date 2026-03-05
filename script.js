@@ -1,54 +1,781 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Mobile menu toggle
-    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-    const sidebar = document.querySelector('.sidebar');
+document.addEventListener('DOMContentLoaded', function () {
+    var output = document.getElementById('output');
+    var input = document.getElementById('command-input');
+    var terminalBody = document.getElementById('terminal-body');
+    var cmdHistory = [];
+    var historyIndex = -1;
+    var booted = false;
 
-    mobileMenuToggle.addEventListener('click', function() {
-        sidebar.classList.toggle('active');
-    });
+    // ── Content ──
 
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', function(event) {
-        if (!sidebar.contains(event.target) && event.target !== mobileMenuToggle) {
-            sidebar.classList.remove('active');
+    var sections = {
+        about: [
+            '<span class="bold">AllScale Lab</span>',
+            '<span class="dim">The experimentation arm of AllScale</span>',
+            '',
+            'We use stablecoin infrastructure to build things that create',
+            '<span class="highlight">positive externalities</span> for the world.',
+            '',
+            'Stablecoin rails can do more than move money. AllScale Lab',
+            'explores how stable, programmable digital currencies can solve',
+            'real-world problems -- from financial inclusion and transparent',
+            'aid distribution to sustainable commerce and public goods funding.',
+            '',
+            'We prototype. We measure impact. We open-source everything.',
+        ],
+
+        mission: [
+            '<span class="bold">Mission</span>',
+            '',
+            'Most fintech optimizes for extraction.',
+            'We optimize for <span class="highlight">externality</span>.',
+            '',
+            'AllScale Lab exists to prove that stablecoin infrastructure',
+            'can generate measurable positive impact at scale -- and that',
+            'doing so is not charity, but good engineering.',
+            '',
+            '<span class="muted">Build things that make the world net-better.</span>',
+            '<span class="muted">Measure it. Open-source it. Repeat.</span>',
+        ],
+
+        experiments: [
+            '<span class="bold">Active Experiments</span>',
+            '',
+            '  <span class="success">[LIVE]</span>    <span class="bold">Transparent Aid Rails</span>',
+            '            On-chain disbursement tracking for humanitarian',
+            '            aid. Every dollar traceable from donor to recipient.',
+            '',
+            '  <span class="warn">[BETA]</span>    <span class="bold">Micro-Yield Public Goods</span>',
+            '            Idle stablecoin reserves generate yield that',
+            '            auto-funds verified public goods projects.',
+            '',
+            '  <span class="accent">[R&D]</span>     <span class="bold">Green Commerce Incentives</span>',
+            '            Stablecoin cashback structures that reward',
+            '            verified sustainable purchasing decisions.',
+            '',
+            '  <span class="accent">[R&D]</span>     <span class="bold">Programmable Impact Bonds</span>',
+            '            Smart contracts that release funds only when',
+            '            measurable social outcomes are achieved.',
+            '',
+            '  <span class="dim">[NEXT]</span>    <span class="bold">Cross-Border Education Fund</span>',
+            '            Borderless micro-scholarships settled in',
+            '            stablecoins with zero intermediary fees.',
+        ],
+
+        focus: [
+            '<span class="bold">Focus Areas</span>',
+            '',
+            '  <span class="highlight">01</span>  <span class="bold">Financial Inclusion</span>',
+            '      Reducing barriers to cross-border economic participation',
+            '      for underserved populations. Banking the unbanked through',
+            '      stablecoin wallets and local on-ramps.',
+            '',
+            '  <span class="highlight">02</span>  <span class="bold">Transparent Public Goods</span>',
+            '      On-chain mechanisms for funding and verifying public',
+            '      goods delivery. Every transaction auditable. Every',
+            '      outcome measurable.',
+            '',
+            '  <span class="highlight">03</span>  <span class="bold">Sustainable Commerce</span>',
+            '      Stablecoin-powered incentive structures that reward',
+            '      positive environmental and social outcomes. Aligning',
+            '      profit with planet.',
+            '',
+            '  <span class="highlight">04</span>  <span class="bold">Programmable Impact</span>',
+            '      Smart contract systems that automate and enforce',
+            '      impact-aligned financial flows. Code as accountability.',
+        ],
+
+        approach: [
+            '<span class="bold">How We Work</span>',
+            '',
+            '  ┌─────────────────────────────────────────────────┐',
+            '  │                                                 │',
+            '  │   <span class="highlight">Identify</span>  ──>  <span class="accent">Prototype</span>  ──>  <span class="warn">Measure</span>        │',
+            '  │      │                            │             │',
+            '  │      │         <span class="success">Open Source</span>  <──────┘             │',
+            '  │      │              │                            │',
+            '  │      └──────── <span class="muted">Iterate</span>  <──┘                     │',
+            '  │                                                 │',
+            '  └─────────────────────────────────────────────────┘',
+            '',
+            '  <span class="highlight">Experiment</span>   Prototype novel stablecoin applications',
+            '  <span class="highlight">Measure</span>      Quantify externalities with real data',
+            '  <span class="highlight">Open Source</span>   Share tools, findings, and frameworks',
+            '  <span class="highlight">Collaborate</span>  Partner with researchers, NGOs, builders',
+        ],
+
+        stack: [
+            '<span class="bold">Infrastructure</span>',
+            '<span class="dim">Built on AllScale\'s production-grade platform</span>',
+            '',
+            '  <span class="highlight">┌──────────────────────┐</span>',
+            '  <span class="highlight">│</span>  Experiment Layer    <span class="highlight">│</span>  Lab prototypes & pilots',
+            '  <span class="highlight">├──────────────────────┤</span>',
+            '  <span class="highlight">│</span>  Impact Metrics      <span class="highlight">│</span>  On-chain outcome tracking',
+            '  <span class="highlight">├──────────────────────┤</span>',
+            '  <span class="highlight">│</span>  Smart Contracts     <span class="highlight">│</span>  Programmable fund release',
+            '  <span class="highlight">├──────────────────────┤</span>',
+            '  <span class="highlight">│</span>  Stablecoin Rails    <span class="highlight">│</span>  Multi-chain, multi-currency',
+            '  <span class="highlight">├──────────────────────┤</span>',
+            '  <span class="highlight">│</span>  Compliance Layer    <span class="highlight">│</span>  KYC/AML, regulatory guardrails',
+            '  <span class="highlight">├──────────────────────┤</span>',
+            '  <span class="highlight">│</span>  AllScale Core       <span class="highlight">│</span>  Production SaaS platform',
+            '  <span class="highlight">└──────────────────────┘</span>',
+        ],
+
+        allscale: [
+            '<span class="bold">About AllScale</span>',
+            '',
+            'AllScale is a next-generation SaaS platform that removes',
+            'friction from cross-border finance using stablecoins.',
+            '',
+            'It integrates payroll, invoicing, social-commerce, and',
+            'treasury management into one platform -- making stablecoin',
+            'adoption intuitive for small and medium-sized businesses.',
+            '',
+            '<span class="dim">Near-instant settlement. Minimal fees. Robust compliance.</span>',
+            '',
+            'AllScale Lab operates as AllScale\'s dedicated research and',
+            'experimentation division, pushing the boundaries of what',
+            'stablecoin infrastructure can achieve for the <span class="highlight">public good</span>.',
+        ],
+
+        team: [
+            '<span class="bold">The Lab</span>',
+            '',
+            'AllScale Lab is a small, focused team of engineers and',
+            'researchers embedded within AllScale. We have direct access',
+            'to production stablecoin infrastructure and the freedom to',
+            'use it for experiments that may never generate revenue --',
+            'but will always generate <span class="highlight">impact</span>.',
+            '',
+            '<span class="dim">We\'re looking for collaborators.</span>',
+            '<span class="dim">Researchers, NGOs, builders -- if you share our vision,</span>',
+            '<span class="dim">run</span> <span class="highlight">contact</span> <span class="dim">to get in touch.</span>',
+        ],
+
+        philosophy: [
+            '<span class="bold">Philosophy</span>',
+            '',
+            '  <span class="highlight">"</span> The best technology creates value that extends',
+            '    beyond its users. A bridge doesn\'t just serve those',
+            '    who cross it -- it reshapes the geography of',
+            '    possibility for an entire region.',
+            '',
+            '    Stablecoin infrastructure is a bridge.',
+            '    We\'re building the roads on the other side. <span class="highlight">"</span>',
+            '',
+            '<span class="dim">  Principles:</span>',
+            '',
+            '  <span class="success">></span> Impact must be measurable, not assumed',
+            '  <span class="success">></span> Open source by default, proprietary by exception',
+            '  <span class="success">></span> Ship fast, measure honestly, iterate or kill',
+            '  <span class="success">></span> Positive-sum thinking over zero-sum competition',
+            '  <span class="success">></span> The hardest problems are the most worth solving',
+        ],
+    };
+
+    var availableCommands = [
+        'help', 'about', 'mission', 'experiments', 'focus',
+        'approach', 'stack', 'allscale', 'team', 'philosophy',
+        'ls', 'cat', 'clear', 'neofetch', 'whoami', 'date',
+        'history', 'echo', 'sudo', 'contact', 'banner',
+        'pwd', 'man', 'exit', 'quit', 'ping', 'status',
+        'tree', 'grep', 'run'
+    ];
+
+    // ── Helpers ──
+
+    function append(html) {
+        output.innerHTML += html;
+        scrollToBottom();
+    }
+
+    function scrollToBottom() {
+        terminalBody.scrollTop = terminalBody.scrollHeight;
+    }
+
+    function printLines(lines) {
+        append(lines.map(function (l) {
+            return '<div class="response">' + l + '</div>';
+        }).join(''));
+    }
+
+    function printCmd(cmd) {
+        append(
+            '<div class="command-line"><span class="prompt">visitor@lab:~$ </span><span class="cmd">' +
+            esc(cmd) + '</span></div>'
+        );
+    }
+
+    function esc(text) {
+        var d = document.createElement('div');
+        d.textContent = text;
+        return d.innerHTML;
+    }
+
+    // ── Command router ──
+
+    function runCommand(raw) {
+        var trimmed = raw.trim();
+        if (!trimmed) return;
+
+        cmdHistory.push(trimmed);
+        historyIndex = cmdHistory.length;
+        printCmd(trimmed);
+
+        var parts = trimmed.split(/\s+/);
+        var cmd = parts[0].toLowerCase();
+        var args = parts.slice(1);
+
+        if (sections[cmd]) {
+            printLines(sections[cmd]);
+            return;
+        }
+
+        switch (cmd) {
+            case 'help':     showHelp(); break;
+            case 'ls':       showLs(); break;
+            case 'cat':      handleCat(args); break;
+            case 'tree':     showTree(); break;
+            case 'clear':    output.innerHTML = ''; break;
+            case 'neofetch': showNeofetch(); break;
+            case 'banner':   showBanner(); break;
+            case 'contact':  showContact(); break;
+            case 'status':   showStatus(); break;
+            case 'ping':     handlePing(args); break;
+            case 'run':      handleRun(args); break;
+            case 'grep':     handleGrep(args); break;
+            case 'whoami':
+                printLines(['<span class="highlight">visitor</span> <span class="dim">-- Welcome to the Lab.</span>']);
+                break;
+            case 'pwd':
+                printLines(['/home/visitor/allscale-lab']);
+                break;
+            case 'date':
+                printLines([new Date().toString()]);
+                break;
+            case 'history':
+                showHistory();
+                break;
+            case 'echo':
+                printLines([esc(args.join(' '))]);
+                break;
+            case 'man':
+                if (args[0] && sections[args[0]]) {
+                    printLines(sections[args[0]]);
+                } else {
+                    printLines([
+                        '<span class="dim">Usage: man &lt;topic&gt;</span>',
+                        'Topics: ' + Object.keys(sections).join(', ')
+                    ]);
+                }
+                break;
+            case 'sudo':
+                printLines([
+                    '<span class="error">Permission denied.</span>',
+                    '<span class="dim">Lab experiments require peer review, not root access.</span>'
+                ]);
+                break;
+            case 'rm':
+                printLines(['<span class="error">rm: cannot remove \'impact\': Operation not permitted</span>']);
+                break;
+            case 'cd':
+                printLines(['<span class="dim">You\'re already in the lab. Start exploring.</span>']);
+                break;
+            case 'vim':
+            case 'nano':
+            case 'emacs':
+                printLines(['<span class="dim">This terminal is read-only. But we appreciate the instinct.</span>']);
+                break;
+            case 'exit':
+            case 'quit':
+                printLines([
+                    '<span class="dim">Closing session...</span>',
+                    '',
+                    '<span class="highlight">Thanks for visiting AllScale Lab.</span>',
+                    '<span class="dim">Go build something that matters.</span>'
+                ]);
+                setTimeout(function () {
+                    input.disabled = true;
+                    input.placeholder = 'Session ended. Refresh to reconnect.';
+                }, 600);
+                break;
+            default:
+                printLines([
+                    '<span class="error">command not found: ' + esc(cmd) + '</span>',
+                    '<span class="dim">Type</span> <span class="highlight">help</span> <span class="dim">to see available commands.</span>'
+                ]);
+        }
+        scrollToBottom();
+    }
+
+    // ── Command implementations ──
+
+    function showHelp() {
+        printLines([
+            '<span class="bold">Available Commands</span>',
+            '',
+            '  <span class="highlight">about</span>          What is AllScale Lab?',
+            '  <span class="highlight">mission</span>        Our mission and why we exist',
+            '  <span class="highlight">experiments</span>    Active and upcoming experiments',
+            '  <span class="highlight">focus</span>          Research focus areas',
+            '  <span class="highlight">approach</span>       How we work',
+            '  <span class="highlight">stack</span>          Technical infrastructure',
+            '  <span class="highlight">philosophy</span>     Our principles and beliefs',
+            '  <span class="highlight">team</span>           The people behind the lab',
+            '  <span class="highlight">allscale</span>       About AllScale (parent company)',
+            '  <span class="highlight">contact</span>        Get in touch',
+            '',
+            '  <span class="accent">ls</span>             List available files',
+            '  <span class="accent">cat &lt;topic&gt;</span>    Read a specific file',
+            '  <span class="accent">tree</span>           Show file tree',
+            '  <span class="accent">grep &lt;term&gt;</span>    Search across all topics',
+            '  <span class="accent">status</span>         Lab system status',
+            '  <span class="accent">neofetch</span>       System info',
+            '  <span class="accent">run &lt;exp&gt;</span>     Run an experiment simulation',
+            '  <span class="accent">ping</span>           Connectivity check',
+            '  <span class="accent">banner</span>         Show the welcome banner',
+            '  <span class="accent">clear</span>          Clear the terminal',
+            '  <span class="accent">history</span>        Command history',
+            '',
+            '<span class="dim">  Tab to autocomplete | Up/Down for history | Ctrl+L to clear</span>',
+        ]);
+    }
+
+    function showLs() {
+        printLines([
+            '<span class="dim">drwxr-xr-x  lab  research</span>  <span class="accent">./experiments/</span>',
+            '<span class="dim">-rw-r--r--  lab  research</span>  about.txt',
+            '<span class="dim">-rw-r--r--  lab  research</span>  mission.txt',
+            '<span class="dim">-rw-r--r--  lab  research</span>  experiments.txt',
+            '<span class="dim">-rw-r--r--  lab  research</span>  focus.txt',
+            '<span class="dim">-rw-r--r--  lab  research</span>  approach.txt',
+            '<span class="dim">-rw-r--r--  lab  research</span>  stack.txt',
+            '<span class="dim">-rw-r--r--  lab  research</span>  philosophy.txt',
+            '<span class="dim">-rw-r--r--  lab  research</span>  team.txt',
+            '<span class="dim">-rw-r--r--  lab  research</span>  allscale.txt',
+            '',
+            '<span class="dim">9 files | Use</span> cat &lt;name&gt; <span class="dim">to read</span>',
+        ]);
+    }
+
+    function showTree() {
+        printLines([
+            '<span class="highlight">allscale-lab/</span>',
+            '├── <span class="accent">about.txt</span>',
+            '├── <span class="accent">mission.txt</span>',
+            '├── <span class="accent">experiments.txt</span>',
+            '├── <span class="accent">focus.txt</span>',
+            '├── <span class="accent">approach.txt</span>',
+            '├── <span class="accent">stack.txt</span>',
+            '├── <span class="accent">philosophy.txt</span>',
+            '├── <span class="accent">team.txt</span>',
+            '├── <span class="accent">allscale.txt</span>',
+            '└── <span class="highlight">experiments/</span>',
+            '    ├── transparent-aid-rails.exp',
+            '    ├── micro-yield-public-goods.exp',
+            '    ├── green-commerce.exp',
+            '    ├── impact-bonds.exp',
+            '    └── education-fund.exp',
+            '',
+            '<span class="dim">9 files, 5 experiments</span>',
+        ]);
+    }
+
+    function handleCat(args) {
+        if (!args.length) {
+            printLines([
+                '<span class="dim">Usage: cat &lt;topic&gt;</span>',
+                'Available: ' + Object.keys(sections).join(', ')
+            ]);
+            return;
+        }
+        var topic = args[0].replace(/\.txt$/, '').toLowerCase();
+        if (sections[topic]) {
+            printLines(sections[topic]);
+        } else {
+            printLines(['<span class="error">cat: ' + esc(args[0]) + ': No such file or directory</span>']);
+        }
+    }
+
+    function handleGrep(args) {
+        if (!args.length) {
+            printLines(['<span class="dim">Usage: grep &lt;term&gt;</span>']);
+            return;
+        }
+        var term = args.join(' ').toLowerCase();
+        var results = [];
+        Object.keys(sections).forEach(function (key) {
+            sections[key].forEach(function (line) {
+                var plain = line.replace(/<[^>]*>/g, '');
+                if (plain.toLowerCase().indexOf(term) !== -1) {
+                    var highlighted = plain.replace(
+                        new RegExp('(' + term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi'),
+                        '<span class="highlight">$1</span>'
+                    );
+                    results.push('  <span class="accent">' + key + ':</span> ' + highlighted);
+                }
+            });
+        });
+        if (results.length) {
+            printLines(['<span class="dim">Found ' + results.length + ' matches:</span>', ''].concat(results));
+        } else {
+            printLines(['<span class="dim">No matches for "' + esc(term) + '"</span>']);
+        }
+    }
+
+    function handlePing(args) {
+        var target = args[0] || 'allscale-lab';
+        printLines(['<span class="dim">PING ' + esc(target) + ' ...</span>']);
+        var count = 0;
+        var interval = setInterval(function () {
+            var ms = (Math.random() * 15 + 5).toFixed(1);
+            append('<div class="response"><span class="dim">64 bytes from ' + esc(target) + ':</span> time=<span class="highlight">' + ms + '</span>ms</div>');
+            count++;
+            if (count >= 4) {
+                clearInterval(interval);
+                append('<div class="response"><span class="dim">--- ' + esc(target) + ' ping complete ---</span></div>');
+                append('<div class="response"><span class="dim">4 packets transmitted, 4 received, 0% loss</span></div>');
+            }
+        }, 400);
+    }
+
+    function handleRun(args) {
+        if (!args.length) {
+            printLines([
+                '<span class="dim">Usage: run &lt;experiment&gt;</span>',
+                '',
+                'Available experiments:',
+                '  <span class="accent">aid</span>       Transparent Aid Rails simulation',
+                '  <span class="accent">yield</span>     Micro-Yield Public Goods simulation',
+                '  <span class="accent">green</span>     Green Commerce simulation',
+                '  <span class="accent">impact</span>    Impact Bonds simulation',
+            ]);
+            return;
+        }
+
+        var exp = args[0].toLowerCase();
+        var sims = {
+            aid: {
+                name: 'Transparent Aid Rails',
+                steps: [
+                    'Initializing aid disbursement contract...',
+                    'Deploying on testnet...',
+                    'Simulating $50,000 USDC aid package...',
+                    'Routing to 250 verified recipients...',
+                    'Processing micro-disbursements...',
+                    'Recording on-chain audit trail...',
+                    'Generating impact report...',
+                ],
+                result: [
+                    '',
+                    '<span class="bold">Simulation Complete</span>',
+                    '',
+                    '  Recipients:        <span class="highlight">250</span>',
+                    '  Total disbursed:   <span class="highlight">$50,000.00 USDC</span>',
+                    '  Avg per recipient: <span class="highlight">$200.00</span>',
+                    '  Settlement time:   <span class="highlight">4.2 seconds</span>',
+                    '  Total fees:        <span class="highlight">$0.37</span>',
+                    '  Transparency:      <span class="success">100% on-chain auditable</span>',
+                    '',
+                    '  <span class="dim">Traditional wire equivalent: ~$12,500 in fees, 3-5 days</span>',
+                ]
+            },
+            yield: {
+                name: 'Micro-Yield Public Goods',
+                steps: [
+                    'Connecting to yield aggregator...',
+                    'Allocating $1M idle reserves to strategy...',
+                    'Simulating 30-day yield period...',
+                    'Calculating public goods allocation...',
+                    'Distributing to verified projects...',
+                ],
+                result: [
+                    '',
+                    '<span class="bold">Simulation Complete</span>',
+                    '',
+                    '  Reserves allocated:   <span class="highlight">$1,000,000 USDC</span>',
+                    '  30-day yield:         <span class="highlight">$4,109.58</span>',
+                    '  APY:                  <span class="highlight">4.93%</span>',
+                    '  Public goods funded:  <span class="highlight">3 projects</span>',
+                    '  Impact score:         <span class="success">+847 beneficiaries</span>',
+                    '',
+                    '  <span class="dim">Zero cost to reserve holders. Pure positive externality.</span>',
+                ]
+            },
+            green: {
+                name: 'Green Commerce Incentives',
+                steps: [
+                    'Loading merchant sustainability scores...',
+                    'Configuring cashback smart contract...',
+                    'Simulating 1,000 purchase transactions...',
+                    'Calculating carbon offset equivalents...',
+                    'Generating environmental impact report...',
+                ],
+                result: [
+                    '',
+                    '<span class="bold">Simulation Complete</span>',
+                    '',
+                    '  Transactions:     <span class="highlight">1,000</span>',
+                    '  Green purchases:  <span class="highlight">623 (62.3%)</span>',
+                    '  Cashback issued:  <span class="highlight">$1,246.00 USDC</span>',
+                    '  CO2 offset equiv: <span class="highlight">3.2 tonnes</span>',
+                    '  Behavior shift:   <span class="success">+23% vs control group</span>',
+                    '',
+                    '  <span class="dim">Incentives work. Stablecoins make them instant.</span>',
+                ]
+            },
+            impact: {
+                name: 'Programmable Impact Bonds',
+                steps: [
+                    'Deploying impact bond contract...',
+                    'Setting outcome milestones...',
+                    'Locking $100,000 USDC in escrow...',
+                    'Simulating 6-month project execution...',
+                    'Verifying milestone completion via oracle...',
+                    'Triggering conditional fund release...',
+                ],
+                result: [
+                    '',
+                    '<span class="bold">Simulation Complete</span>',
+                    '',
+                    '  Bond value:          <span class="highlight">$100,000 USDC</span>',
+                    '  Milestones set:      <span class="highlight">5</span>',
+                    '  Milestones met:      <span class="highlight">4/5</span>',
+                    '  Funds released:      <span class="highlight">$82,000 USDC</span>',
+                    '  Funds returned:      <span class="highlight">$18,000 USDC</span>',
+                    '  Outcome verified:    <span class="success">On-chain oracle</span>',
+                    '',
+                    '  <span class="dim">Pay for outcomes, not promises.</span>',
+                ]
+            }
+        };
+
+        if (!sims[exp]) {
+            printLines(['<span class="error">Unknown experiment: ' + esc(exp) + '</span>', '<span class="dim">Try: aid, yield, green, impact</span>']);
+            return;
+        }
+
+        var sim = sims[exp];
+        printLines(['', '<span class="bold">Running: ' + sim.name + '</span>', '']);
+
+        var i = 0;
+        var interval = setInterval(function () {
+            if (i < sim.steps.length) {
+                var progress = '  <span class="success">[' + ('='.repeat(Math.floor(((i + 1) / sim.steps.length) * 20))).padEnd(20, ' ') + ']</span>  ';
+                append('<div class="response">' + progress + '<span class="dim">' + sim.steps[i] + '</span></div>');
+                i++;
+            } else {
+                clearInterval(interval);
+                printLines(sim.result);
+            }
+        }, 500);
+    }
+
+    function showStatus() {
+        printLines([
+            '<span class="bold">Lab Status</span>',
+            '',
+            '  <span class="dim">Service</span>              <span class="dim">Status</span>',
+            '  ──────────────────────────────────────',
+            '  Stablecoin Rails     <span class="success">operational</span>',
+            '  Impact Metrics       <span class="success">operational</span>',
+            '  Smart Contracts      <span class="success">operational</span>',
+            '  Compliance Layer     <span class="success">operational</span>',
+            '  Experiment Runner    <span class="success">operational</span>',
+            '  Testnet Nodes        <span class="success">operational</span>',
+            '',
+            '  <span class="dim">All systems nominal.</span>  <span class="highlight">Uptime: 99.97%</span>',
+        ]);
+    }
+
+    function showHistory() {
+        if (!cmdHistory.length) {
+            printLines(['<span class="dim">No commands in history.</span>']);
+            return;
+        }
+        printLines(cmdHistory.map(function (c, i) {
+            return '  <span class="dim">' + String(i + 1).padStart(4) + '</span>  ' + esc(c);
+        }));
+    }
+
+    function showContact() {
+        printLines([
+            '<span class="bold">Contact AllScale Lab</span>',
+            '',
+            '  <span class="highlight">GitHub</span>     github.com/allscale-io',
+            '  <span class="highlight">Parent</span>     allscale.io',
+            '',
+            '  <span class="dim">We\'re looking for collaborators -- researchers, NGOs,</span>',
+            '  <span class="dim">engineers, and anyone building for positive impact.</span>',
+            '',
+            '  <span class="dim">Open an issue. Start a conversation.</span>',
+        ]);
+    }
+
+    function showNeofetch() {
+        printLines([
+            '',
+            '<span class="ascii-art">      _    _ _ ____            _</span>        <span class="bold">AllScale Lab</span>',
+            '<span class="ascii-art">     / \\  | | / ___|  ___ __ _| | ___</span>   <span class="dim">──────────────────────</span>',
+            '<span class="ascii-art">    / _ \\ | | \\___ \\ / __/ _` | |/ _ \\</span>  <span class="highlight">Type:</span>       Research Lab',
+            '<span class="ascii-art">   / ___ \\| | |___) | (_| (_| | |  __/</span>  <span class="highlight">Parent:</span>     AllScale',
+            '<span class="ascii-art">  /_/   \\_\\_|_|____/ \\___\\__,_|_|\\___|</span>  <span class="highlight">Focus:</span>      Stablecoin R&D',
+            '<span class="ascii-art">              <span class="accent">L  A  B</span></span>                    <span class="highlight">Mission:</span>    Positive externalities',
+            '                                       <span class="highlight">Stack:</span>      Solidity, EVM, APIs',
+            '                                       <span class="highlight">Chains:</span>     Multi-chain',
+            '                                       <span class="highlight">License:</span>    Open Source',
+            '                                       <span class="highlight">Experiments:</span> 5 active',
+            '                                       <span class="highlight">Status:</span>     <span class="success">Online</span>',
+            '',
+        ]);
+    }
+
+    function showBanner() {
+        printLines([
+            '',
+            '<span class="ascii-art">      _    _ _ ____            _</span>',
+            '<span class="ascii-art">     / \\  | | / ___|  ___ __ _| | ___</span>',
+            '<span class="ascii-art">    / _ \\ | | \\___ \\ / __/ _` | |/ _ \\</span>',
+            '<span class="ascii-art">   / ___ \\| | |___) | (_| (_| | |  __/</span>',
+            '<span class="ascii-art">  /_/   \\_\\_|_|____/ \\___\\__,_|_|\\___|</span>',
+            '<span class="ascii-art">              <span class="accent">L  A  B</span></span>',
+            '',
+            '<span class="dim">  Stablecoin experiments for positive externalities</span>',
+            '',
+        ]);
+    }
+
+    // ── Boot sequence ──
+
+    function boot() {
+        var bootLines = [
+            '<span class="dim">[    0.000] AllScale Lab kernel loading...</span>',
+            '<span class="dim">[    0.012] Initializing stablecoin runtime...</span>',
+            '<span class="dim">[    0.034] Loading experiment modules...</span>',
+            '<span class="dim">[    0.051] Connecting to chain adapters... <span class="success">OK</span></span>',
+            '<span class="dim">[    0.067] Impact metrics engine... <span class="success">OK</span></span>',
+            '<span class="dim">[    0.089] Smart contract layer... <span class="success">OK</span></span>',
+            '<span class="dim">[    0.102] Compliance checks... <span class="success">PASS</span></span>',
+            '<span class="dim">[    0.118] All systems nominal.</span>',
+            '',
+        ];
+
+        var bannerLines = [
+            '<span class="ascii-art">      _    _ _ ____            _</span>',
+            '<span class="ascii-art">     / \\  | | / ___|  ___ __ _| | ___</span>',
+            '<span class="ascii-art">    / _ \\ | | \\___ \\ / __/ _` | |/ _ \\</span>',
+            '<span class="ascii-art">   / ___ \\| | |___) | (_| (_| | |  __/</span>',
+            '<span class="ascii-art">  /_/   \\_\\_|_|____/ \\___\\__,_|_|\\___|</span>',
+            '<span class="ascii-art">              <span class="accent">L  A  B</span></span>',
+            '',
+            '<span class="dim">  Stablecoin experiments for positive externalities</span>',
+            '',
+            '<span class="separator">  ─────────────────────────────────────────────────</span>',
+            '',
+            '  Welcome to <span class="bold">AllScale Lab</span>.',
+            '',
+            '  This is an interactive terminal.',
+            '  Explore our research, run experiment simulations,',
+            '  and learn what we\'re building.',
+            '',
+            '  <span class="dim">Type</span> <span class="highlight">help</span> <span class="dim">to get started.</span>',
+            '  <span class="dim">Type</span> <span class="highlight">experiments</span> <span class="dim">to see what we\'re working on.</span>',
+            '  <span class="dim">Type</span> <span class="highlight">run aid</span> <span class="dim">to simulate an experiment.</span>',
+            '',
+        ];
+
+        var allLines = bootLines.concat(bannerLines);
+        var delay = 0;
+
+        allLines.forEach(function (line, i) {
+            var increment = i < bootLines.length ? 80 : 25;
+            setTimeout(function () {
+                append('<div class="response boot-line">' + line + '</div>');
+            }, delay);
+            delay += increment;
+        });
+
+        setTimeout(function () {
+            booted = true;
+            input.focus();
+        }, delay + 100);
+    }
+
+    // ── Tab completion ──
+
+    function tabComplete(partial) {
+        if (!partial) return partial;
+        var lower = partial.toLowerCase();
+        var matches = availableCommands.filter(function (c) {
+            return c.startsWith(lower);
+        });
+        if (matches.length === 1) return matches[0];
+        if (matches.length > 1) {
+            printCmd(partial);
+            printLines(matches.map(function (m) {
+                return '  <span class="accent">' + m + '</span>';
+            }));
+        }
+        return partial;
+    }
+
+    // ── Event listeners ──
+
+    input.addEventListener('keydown', function (e) {
+        if (!booted) { e.preventDefault(); return; }
+
+        if (e.key === 'Enter') {
+            var val = input.value;
+            input.value = '';
+            runCommand(val);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (historyIndex > 0) {
+                historyIndex--;
+                input.value = cmdHistory[historyIndex];
+            }
+        } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (historyIndex < cmdHistory.length - 1) {
+                historyIndex++;
+                input.value = cmdHistory[historyIndex];
+            } else {
+                historyIndex = cmdHistory.length;
+                input.value = '';
+            }
+        } else if (e.key === 'Tab') {
+            e.preventDefault();
+            var parts = input.value.split(/\s+/);
+            if (parts.length <= 1) {
+                input.value = tabComplete(input.value);
+            } else {
+                var last = parts[parts.length - 1].replace(/\.txt$/, '').toLowerCase();
+                var topicMatches = Object.keys(sections).filter(function (s) {
+                    return s.startsWith(last);
+                });
+                if (topicMatches.length === 1) {
+                    parts[parts.length - 1] = topicMatches[0];
+                    input.value = parts.join(' ');
+                } else if (topicMatches.length > 1) {
+                    printCmd(input.value);
+                    printLines(topicMatches.map(function (m) {
+                        return '  <span class="accent">' + m + '</span>';
+                    }));
+                }
+            }
+        } else if (e.key === 'l' && e.ctrlKey) {
+            e.preventDefault();
+            output.innerHTML = '';
         }
     });
 
-    // Section animations
-    const sections = document.querySelectorAll('section');
-    const observerOptions = {
-        threshold: 0.1
-    };
-
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('active');
-            }
-        });
-    }, observerOptions);
-
-    sections.forEach(section => {
-        observer.observe(section);
+    terminalBody.addEventListener('click', function () { input.focus(); });
+    document.addEventListener('click', function (e) {
+        if (e.target.closest('#terminal')) input.focus();
     });
 
-    // Smooth scrolling for navigation links
-    document.querySelectorAll('nav a').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            const targetSection = document.querySelector(targetId);
-            
-            if (targetSection) {
-                targetSection.scrollIntoView({
-                    behavior: 'smooth'
-                });
-                
-                // Close mobile menu after clicking a link
-                if (window.innerWidth <= 768) {
-                    sidebar.classList.remove('active');
-                }
-            }
-        });
-    });
-}); 
+    // ── Init ──
+    boot();
+});

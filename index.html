@@ -3,176 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AllScale Whitepaper</title>
+    <title>AllScale Lab</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Override any default list styles */
-        ul, ol {
-            list-style: none !important;
-        }
-    </style>
+    <meta name="description" content="AllScale Lab - Stablecoin experiments for positive externalities">
 </head>
 <body>
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h1>AllScale</h1>
-            <p class="tagline">Next-Generation Cross-Border Finance Platform</p>
+    <div id="scanline"></div>
+    <div id="terminal">
+        <div id="terminal-header">
+            <div class="terminal-buttons">
+                <span class="btn-close"></span>
+                <span class="btn-minimize"></span>
+                <span class="btn-maximize"></span>
+            </div>
+            <div class="terminal-title">lab@allscale: ~/experiments</div>
         </div>
-        <nav>
-            <ul>
-                <li><a href="#executive-summary">Executive Summary</a></li>
-                <li><a href="#market-landscape">Market Landscape</a></li>
-                <li><a href="#challenges">Challenges for SMBs</a></li>
-                <li><a href="#stablecoin-fundamentals">Stablecoin Fundamentals</a></li>
-                <li><a href="#architecture">Platform Architecture</a></li>
-                <li><a href="#core-modules">Core Modules</a></li>
-                <li><a href="#security">Security & Compliance</a></li>
-                <li><a href="#business-model">Business Model</a></li>
-                <li><a href="#differentiation">Competitive Edge</a></li>
-                <li><a href="#roadmap">Roadmap</a></li>
-                <li><a href="#conclusion">Conclusion</a></li>
-            </ul>
-        </nav>
+        <div id="terminal-body">
+            <div id="output"></div>
+            <div id="input-line">
+                <span class="prompt">visitor@lab:~$&nbsp;</span>
+                <input type="text" id="command-input" autofocus autocomplete="off" spellcheck="false">
+            </div>
+        </div>
     </div>
-
-    <div class="mobile-menu-toggle">☰</div>
-
-    <main>
-        <section id="executive-summary">
-            <h2>Executive Summary</h2>
-            <p>AllScale is a next-generation SaaS platform designed to remove the friction of traditional cross-border finance and unlock the power of stablecoins for small and medium‑sized businesses (SMBs). By seamlessly integrating payroll, invoicing, social-commerce checkout, and treasury management, AllScale makes stablecoin adoption as intuitive as using familiar payment methods. The platform delivers near-instant settlement, minimal fees, and robust compliance, enabling SMBs to expand globally without the delays, costs, and complexity of legacy financial rails.</p>
-        </section>
-
-        <section id="market-landscape">
-            <h2>Market Landscape and Opportunity</h2>
-            <p>The global stablecoin market has matured into a multi-hundred‑billion‑dollar ecosystem, driven by demand for faster settlement, lower transaction costs, and value stability. SMBs operating internationally face mounting pressure to streamline cross‑border payments, manage currency volatility, and maintain transparent records. Despite clear benefits, many lack the technical expertise and compliance infrastructure to adopt blockchain‑based solutions. AllScale addresses this gap by packaging stablecoin rail connectivity, regulatory guardrails, and user‑friendly workflows into a cohesive SaaS offering.</p>
-            
-            <h3>Key Drivers</h3>
-            <ul>
-                <li><strong>Growth of Remote and Gig Economies</strong>: As businesses hire contractors across borders, demand for instant, cost‑predictable payouts has skyrocketed.</li>
-                <li><strong>Enterprise Experimentation</strong>: Large corporations piloting on‑chain invoicing and treasury have validated stablecoins for high‑value flows, paving the way for mainstream SMB adoption.</li>
-                <li><strong>Regulatory Momentum</strong>: Emerging frameworks (e.g., U.S. federal stablecoin legislation, EU's MiCA) provide clarity around reserve audits, consumer protections, and licensing requirements.</li>
-            </ul>
-        </section>
-
-        <section id="challenges">
-            <h2>Challenges for SMBs</h2>
-            <p>Despite the promise of blockchain, SMBs face several significant barriers:</p>
-            <ul>
-                <li><strong>Complex On‑Ramp/Off‑Ramp Integration</strong>: Connecting to multiple fiat rails, local payment networks, and crypto exchanges requires specialized APIs and technical expertise.</li>
-                <li><strong>Compliance Overhead</strong>: KYC/KYB screening, sanctions screening, and transaction monitoring are resource‑intensive and require dedicated compliance teams.</li>
-                <li><strong>Volatility and Hedging</strong>: Even stablecoin peg deviations can complicate budgeting when converting back to local currency, requiring sophisticated hedging strategies.</li>
-                <li><strong>User Experience Gaps</strong>: Managing private keys, wallet addresses, and on‑chain confirmations remains unfamiliar to non‑technical users, creating adoption barriers.</li>
-            </ul>
-        </section>
-
-        <section id="stablecoin-fundamentals">
-            <h2>Stablecoin Fundamentals</h2>
-            <p>Stablecoins are digital tokens pegged 1:1 to fiat currencies and collateralized by reserves that are regularly audited. Major issuers maintain transparent reserve management, and most stablecoins now circulate on multiple blockchains to optimize speed and fees.</p>
-            <ul>
-                <li><strong>Instant Settlement</strong>: On‑chain transactions finalize in seconds, reducing settlement risk and improving cash flow management.</li>
-                <li><strong>Low Fees</strong>: Network fees are a fraction of traditional wire or card rails, enabling cost-effective cross-border transactions.</li>
-                <li><strong>Transparency</strong>: Blockchain explorers provide real‑time visibility into transactions and reserves, enhancing trust and auditability.</li>
-            </ul>
-        </section>
-
-        <section id="architecture">
-            <h2>Platform Architecture</h2>
-            <p>AllScale leverages a modular, microservices‑driven architecture designed for scalability and reliability:</p>
-            <ul>
-                <li><strong>Chain Adapter Layer</strong>: Abstracts multiple blockchains (EVM and non‑EVM) under a unified API, enabling seamless cross-chain operations.</li>
-                <li><strong>Compliance Engine</strong>: Orchestrates KYC/KYB workflows, sanctions checks, and transaction monitoring with configurable risk thresholds.</li>
-                <li><strong>Payment Core</strong>: Manages on‑chain stablecoin flows, fiat rails (ACH, SEPA, Faster Payments, SWIFT), and FX conversions.</li>
-                <li><strong>Treasury Dashboard</strong>: Provides real‑time balance, yield optimization on reserves, and portfolio analytics.</li>
-                <li><strong>Integration Framework</strong>: SDKs and webhook endpoints enable seamless connection to HRIS, ERP, CRM, ecommerce, and accounting platforms.</li>
-            </ul>
-        </section>
-
-        <section id="core-modules">
-            <h2>Core Modules and Workflows</h2>
-            
-            <h3>Payroll Management</h3>
-            <ul>
-                <li><strong>Global Contractor Payouts</strong>: Generate bulk payout batches in stablecoin or local fiat. Recipients choose settlement currency based on their preferences and local regulations.</li>
-                <li><strong>Automated Tax and Compliance</strong>: Auto‑withhold local payroll taxes where required; generate compliance reports for multiple jurisdictions.</li>
-                <li><strong>Self‑Service Dashboard</strong>: Simple interface for payroll approval, release scheduling, and reconciliation with existing accounting systems.</li>
-            </ul>
-
-            <h3>Invoicing and Collections</h3>
-            <ul>
-                <li><strong>One‑Click Invoice Links</strong>: Branded URLs that accept stablecoins or fiat; payments settle to AllScale treasury instantly, reducing days sales outstanding.</li>
-                <li><strong>Instant Reconciliation</strong>: On‑chain events auto‑match with accounting entries in QuickBooks, Xero, or ERP systems, eliminating manual reconciliation.</li>
-                <li><strong>Customizable Dunning</strong>: Automated reminders and retry logic for payment failures, with configurable escalation paths.</li>
-            </ul>
-
-            <h3>Embedded Social-Commerce</h3>
-            <ul>
-                <li><strong>Checkout Widget</strong>: Lightweight plugin for Shopify, WooCommerce, and custom websites; accepts stablecoins alongside traditional methods.</li>
-                <li><strong>Loyalty and Rewards</strong>: Configure tokenized reward points that convert seamlessly into stablecoin balances, enhancing customer engagement.</li>
-                <li><strong>Fraud Detection</strong>: Real‑time risk scoring on wallet addresses and transaction patterns, reducing chargebacks and fraud losses.</li>
-            </ul>
-
-            <h3>Treasury and Settlement</h3>
-            <ul>
-                <li><strong>Multi-Rail On‑Ramping</strong>: Local currency deposits via bank transfer, card, or partner integrations, with competitive FX rates.</li>
-                <li><strong>Cross‑Chain Conversion</strong>: Real‑time swaps across supported networks to optimize speed and fees, with automatic route optimization.</li>
-                <li><strong>Yield Optimization</strong>: Allocate idle reserves into interest‑bearing strategies or decentralized lending protocols with built‑in safeguards.</li>
-            </ul>
-        </section>
-
-        <section id="security">
-            <h2>Security, Compliance, and Trust</h2>
-            <ul>
-                <li><strong>Regulatory Licenses</strong>: Operates under MSB, PSP, and e‑money licenses in key jurisdictions, ensuring full regulatory compliance.</li>
-                <li><strong>Audit and Assurance</strong>: Quarterly reserve attestations by Big Four auditors; SOC 2 Type II compliant with regular security assessments.</li>
-                <li><strong>Key Management</strong>: Multi‑party computation (MPC) wallets with flexible threshold signing, eliminating single points of failure.</li>
-                <li><strong>Data Protection</strong>: End‑to‑end encryption, strict access controls, and breach response protocols meeting global data protection standards.</li>
-            </ul>
-        </section>
-
-        <section id="business-model">
-            <h2>Business Model and Pricing</h2>
-            <p>AllScale's tiered pricing aligns fees with transaction volumes and value delivered:</p>
-            <ul>
-                <li><strong>Payroll Seats</strong>: Fixed monthly fee per active user seat, with volume discounts for larger teams.</li>
-                <li><strong>Invoice Settlement</strong>: Volume‑tiered percentage on settled amount, with lower rates for higher volumes.</li>
-                <li><strong>Social‑Commerce Plugin</strong>: Subscription plus per‑transaction fee, with custom pricing for enterprise clients.</li>
-                <li><strong>On/Off‑Ramp Spread</strong>: Minimal markup on conversion, competitive with traditional FX providers.</li>
-                <li><strong>Professional Services</strong>: Custom integrations, compliance setup, and white‑glove support for enterprise clients.</li>
-            </ul>
-        </section>
-
-        <section id="differentiation">
-            <h2>Competitive Differentiation</h2>
-            <ul>
-                <li><strong>SMB Focus</strong>: Tailored workflows and pricing for businesses with limited crypto expertise, reducing adoption barriers.</li>
-                <li><strong>Comprehensive Suite</strong>: From HR to ecommerce to treasury in a single platform, eliminating integration complexity.</li>
-                <li><strong>Developer-Friendly</strong>: Public APIs and SDKs for rapid integration, with extensive documentation and support.</li>
-                <li><strong>Compliance-First</strong>: Built‑in licensing, audits, and controls reduce legal overhead and regulatory risk.</li>
-            </ul>
-        </section>
-
-        <section id="roadmap">
-            <h2>Roadmap and Future Vision</h2>
-            <ul>
-                <li><strong>Q3 2025</strong>: Launch of advanced payroll analytics and multi‑currency budgets, enabling better financial planning.</li>
-                <li><strong>Q4 2025</strong>: Social‑commerce loyalty marketplace and co‑branded card issuance, expanding payment options.</li>
-                <li><strong>Q1 2026</strong>: Expansion into Asia‑Pacific with localized rails; roll‑out of self‑custodial wallet option.</li>
-                <li><strong>Mid‑2026</strong>: AI‑driven treasury forecasting and predictive compliance alerts, enhancing risk management.</li>
-            </ul>
-        </section>
-
-        <section id="conclusion">
-            <h2>Conclusion</h2>
-            <p>AllScale empowers SMBs to harness the transformative benefits of stablecoins without bearing the technical and regulatory burden. By delivering an all‑in‑one SaaS layer—spanning payroll, invoicing, commerce, and treasury—AllScale unlocks global opportunities, enabling businesses to grow faster, operate leaner, and compete on a global stage. The platform's comprehensive approach to cross-border finance, combined with its focus on user experience and compliance, positions it as a critical enabler of the next generation of global business operations.</p>
-        </section>
-    </main>
-
-    <footer>
-        <p>© 2025 AllScale. All rights reserved.</p>
-        <p class="tagline">Next-Generation Cross-Border Finance Platform</p>
-    </footer>
-
     <script src="script.js"></script>
 </body>
-</html> 
+</html>
