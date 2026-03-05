@@ -39,27 +39,100 @@ document.addEventListener('DOMContentLoaded', function () {
         ],
 
         experiments: [
-            '<span class="bold">Active Experiments</span>',
+            '<span class="bold">Experiments</span>',
             '',
-            '  <span class="success">[LIVE]</span>    <span class="bold">Transparent Aid Rails</span>',
-            '            On-chain disbursement tracking for humanitarian',
-            '            aid. Every dollar traceable from donor to recipient.',
+            '  <span class="success">[ACTIVE]</span>  <span class="bold">x402 Charity</span>',
+            '            Open-source middleware that embeds automatic',
+            '            micro-donations into any payment flow, powered',
+            '            by the x402 protocol.',
             '',
-            '  <span class="warn">[BETA]</span>    <span class="bold">Micro-Yield Public Goods</span>',
-            '            Idle stablecoin reserves generate yield that',
-            '            auto-funds verified public goods projects.',
+            '            If payments can be programmable, so can giving.',
             '',
-            '  <span class="accent">[R&D]</span>     <span class="bold">Green Commerce Incentives</span>',
-            '            Stablecoin cashback structures that reward',
-            '            verified sustainable purchasing decisions.',
+            '            Every trade, subscription, or API call can trigger',
+            '            a small stablecoin donation to a verified charity --',
+            '            in the background, with zero extra steps for the user.',
             '',
-            '  <span class="accent">[R&D]</span>     <span class="bold">Programmable Impact Bonds</span>',
-            '            Smart contracts that release funds only when',
-            '            measurable social outcomes are achieved.',
+            '  <span class="dim">repo:</span>     <span class="accent">github.com/allscale-io/x402charity</span>',
+            '  <span class="dim">npm:</span>      <span class="accent">x402charity</span>',
+            '  <span class="dim">chain:</span>    Base (USDC)',
+            '  <span class="dim">license:</span>  MIT',
             '',
-            '  <span class="dim">[NEXT]</span>    <span class="bold">Cross-Border Education Fund</span>',
-            '            Borderless micro-scholarships settled in',
-            '            stablecoins with zero intermediary fees.',
+            '<span class="dim">  Type</span> <span class="highlight">x402</span> <span class="dim">for technical details, or</span> <span class="highlight">run x402</span> <span class="dim">to simulate.</span>',
+        ],
+
+        x402: [
+            '<span class="bold">x402 Charity</span> <span class="dim">-- Technical Overview</span>',
+            '',
+            '<span class="accent">What is it?</span>',
+            '',
+            '  An open-source middleware that lets any project trigger a',
+            '  small charitable donation whenever a user takes an action --',
+            '  a trade, a subscription, an API call, anything.',
+            '',
+            '  The donation happens in the background. No extra steps for',
+            '  the user. No separate donation UI. It\'s just part of the',
+            '  payment.',
+            '',
+            '<span class="accent">Why x402?</span>',
+            '',
+            '  The x402 protocol makes machine-to-machine stablecoin',
+            '  payments native to HTTP. x402 Charity extends that idea:',
+            '  if payments can be programmable, so can giving.',
+            '',
+            '<span class="accent">How it works:</span>',
+            '',
+            '  ┌─────────────┐    ┌──────────────┐    ┌──────────────┐',
+            '  │ User action │ -> │   Your app   │ -> │ x402 Charity │',
+            '  └─────────────┘    └──────┬───────┘    │  middleware   │',
+            '                            │            └──────┬───────┘',
+            '                            v                   v',
+            '                     Normal payment      Donation sent',
+            '                      continues          via x402',
+            '',
+            '<span class="accent">Quick start:</span>',
+            '',
+            '  <span class="dim">$</span> <span class="highlight">npm install x402charity</span>',
+            '',
+            '  <span class="muted">const { x402Charity } = require(\'x402charity\');</span>',
+            '',
+            '  <span class="muted">const charity = x402Charity({</span>',
+            '  <span class="muted">  cause: \'red-cross\',</span>',
+            '  <span class="muted">  amount: \'0.0001\',      // USDC per event</span>',
+            '  <span class="muted">  currency: \'USDC\',</span>',
+            '  <span class="muted">});</span>',
+            '',
+            '  <span class="muted">app.post(\'/trade\', charity.wrap(async (req, res) => {</span>',
+            '  <span class="muted">  // your trade logic here</span>',
+            '  <span class="muted">}));</span>',
+            '',
+            '<span class="accent">Example use cases:</span>',
+            '',
+            '  <span class="highlight">></span> DEX or prediction market -- donate $0.0001 per order',
+            '  <span class="highlight">></span> AI SaaS -- donate on every plan purchase or API call',
+            '  <span class="highlight">></span> Any x402-enabled app -- attach a cause to any event',
+            '',
+            '<span class="accent">Configuration:</span>',
+            '',
+            '  ┌────────────┬──────────────────────────────┬──────────┐',
+            '  │ <span class="bold">Option</span>     │ <span class="bold">Description</span>                    │ <span class="bold">Default</span>  │',
+            '  ├────────────┼──────────────────────────────┼──────────┤',
+            '  │ cause      │ Charity ID or wallet address  │ --       │',
+            '  │ amount     │ Donation amount per event     │ 0.0001   │',
+            '  │ currency   │ Stablecoin to use             │ USDC     │',
+            '  │ network    │ Chain to send on              │ base     │',
+            '  │ silent     │ Suppress donation errors      │ true     │',
+            '  └────────────┴──────────────────────────────┴──────────┘',
+            '',
+            '<span class="accent">Architecture:</span>',
+            '',
+            '  <span class="highlight">packages/</span>',
+            '  ├── <span class="accent">core/</span>       Framework-agnostic donation client',
+            '  ├── <span class="accent">express/</span>    Express middleware',
+            '  ├── <span class="accent">next/</span>       Next.js middleware',
+            '  └── <span class="accent">cli/</span>        CLI tool (npx x402charity donate)',
+            '',
+            '  <span class="highlight">registry/</span>',
+            '  └── charities.json   Open directory of verified charities',
         ],
 
         focus: [
@@ -109,15 +182,13 @@ document.addEventListener('DOMContentLoaded', function () {
             '<span class="dim">Built on AllScale\'s production-grade platform</span>',
             '',
             '  <span class="highlight">┌──────────────────────┐</span>',
-            '  <span class="highlight">│</span>  Experiment Layer    <span class="highlight">│</span>  Lab prototypes & pilots',
+            '  <span class="highlight">│</span>  x402 Charity        <span class="highlight">│</span>  Micro-donation middleware',
             '  <span class="highlight">├──────────────────────┤</span>',
-            '  <span class="highlight">│</span>  Impact Metrics      <span class="highlight">│</span>  On-chain outcome tracking',
+            '  <span class="highlight">│</span>  x402 Protocol       <span class="highlight">│</span>  HTTP-native stablecoin payments',
             '  <span class="highlight">├──────────────────────┤</span>',
-            '  <span class="highlight">│</span>  Smart Contracts     <span class="highlight">│</span>  Programmable fund release',
+            '  <span class="highlight">│</span>  Charity Registry    <span class="highlight">│</span>  Verified nonprofit endpoints',
             '  <span class="highlight">├──────────────────────┤</span>',
-            '  <span class="highlight">│</span>  Stablecoin Rails    <span class="highlight">│</span>  Multi-chain, multi-currency',
-            '  <span class="highlight">├──────────────────────┤</span>',
-            '  <span class="highlight">│</span>  Compliance Layer    <span class="highlight">│</span>  KYC/AML, regulatory guardrails',
+            '  <span class="highlight">│</span>  USDC on Base        <span class="highlight">│</span>  Gas-free stablecoin rails',
             '  <span class="highlight">├──────────────────────┤</span>',
             '  <span class="highlight">│</span>  AllScale Core       <span class="highlight">│</span>  Production SaaS platform',
             '  <span class="highlight">└──────────────────────┘</span>',
@@ -176,7 +247,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     var availableCommands = [
-        'help', 'about', 'mission', 'experiments', 'focus',
+        'help', 'about', 'mission', 'experiments', 'x402', 'focus',
         'approach', 'stack', 'allscale', 'team', 'philosophy',
         'ls', 'cat', 'clear', 'neofetch', 'whoami', 'date',
         'history', 'echo', 'sudo', 'contact', 'banner',
@@ -318,7 +389,8 @@ document.addEventListener('DOMContentLoaded', function () {
             '',
             '  <span class="highlight">about</span>          What is AllScale Lab?',
             '  <span class="highlight">mission</span>        Our mission and why we exist',
-            '  <span class="highlight">experiments</span>    Active and upcoming experiments',
+            '  <span class="highlight">experiments</span>    Current experiment: x402 Charity',
+            '  <span class="highlight">x402</span>           x402 Charity technical deep-dive',
             '  <span class="highlight">focus</span>          Research focus areas',
             '  <span class="highlight">approach</span>       How we work',
             '  <span class="highlight">stack</span>          Technical infrastructure',
@@ -333,7 +405,7 @@ document.addEventListener('DOMContentLoaded', function () {
             '  <span class="accent">grep &lt;term&gt;</span>    Search across all topics',
             '  <span class="accent">status</span>         Lab system status',
             '  <span class="accent">neofetch</span>       System info',
-            '  <span class="accent">run &lt;exp&gt;</span>     Run an experiment simulation',
+            '  <span class="accent">run x402</span>       Run x402 Charity simulation',
             '  <span class="accent">ping</span>           Connectivity check',
             '  <span class="accent">banner</span>         Show the welcome banner',
             '  <span class="accent">clear</span>          Clear the terminal',
@@ -349,6 +421,7 @@ document.addEventListener('DOMContentLoaded', function () {
             '<span class="dim">-rw-r--r--  lab  research</span>  about.txt',
             '<span class="dim">-rw-r--r--  lab  research</span>  mission.txt',
             '<span class="dim">-rw-r--r--  lab  research</span>  experiments.txt',
+            '<span class="dim">-rw-r--r--  lab  research</span>  x402.txt',
             '<span class="dim">-rw-r--r--  lab  research</span>  focus.txt',
             '<span class="dim">-rw-r--r--  lab  research</span>  approach.txt',
             '<span class="dim">-rw-r--r--  lab  research</span>  stack.txt',
@@ -356,7 +429,7 @@ document.addEventListener('DOMContentLoaded', function () {
             '<span class="dim">-rw-r--r--  lab  research</span>  team.txt',
             '<span class="dim">-rw-r--r--  lab  research</span>  allscale.txt',
             '',
-            '<span class="dim">9 files | Use</span> cat &lt;name&gt; <span class="dim">to read</span>',
+            '<span class="dim">10 files | Use</span> cat &lt;name&gt; <span class="dim">to read</span>',
         ]);
     }
 
@@ -366,6 +439,7 @@ document.addEventListener('DOMContentLoaded', function () {
             '├── <span class="accent">about.txt</span>',
             '├── <span class="accent">mission.txt</span>',
             '├── <span class="accent">experiments.txt</span>',
+            '├── <span class="accent">x402.txt</span>',
             '├── <span class="accent">focus.txt</span>',
             '├── <span class="accent">approach.txt</span>',
             '├── <span class="accent">stack.txt</span>',
@@ -373,13 +447,16 @@ document.addEventListener('DOMContentLoaded', function () {
             '├── <span class="accent">team.txt</span>',
             '├── <span class="accent">allscale.txt</span>',
             '└── <span class="highlight">experiments/</span>',
-            '    ├── transparent-aid-rails.exp',
-            '    ├── micro-yield-public-goods.exp',
-            '    ├── green-commerce.exp',
-            '    ├── impact-bonds.exp',
-            '    └── education-fund.exp',
+            '    └── <span class="success">x402-charity/</span>',
+            '        ├── packages/',
+            '        │   ├── core/',
+            '        │   ├── express/',
+            '        │   ├── next/',
+            '        │   └── cli/',
+            '        └── registry/',
+            '            └── charities.json',
             '',
-            '<span class="dim">9 files, 5 experiments</span>',
+            '<span class="dim">10 files, 1 active experiment</span>',
         ]);
     }
 
@@ -447,130 +524,79 @@ document.addEventListener('DOMContentLoaded', function () {
                 '<span class="dim">Usage: run &lt;experiment&gt;</span>',
                 '',
                 'Available experiments:',
-                '  <span class="accent">aid</span>       Transparent Aid Rails simulation',
-                '  <span class="accent">yield</span>     Micro-Yield Public Goods simulation',
-                '  <span class="accent">green</span>     Green Commerce simulation',
-                '  <span class="accent">impact</span>    Impact Bonds simulation',
+                '  <span class="accent">x402</span>      x402 Charity micro-donation simulation',
             ]);
             return;
         }
 
         var exp = args[0].toLowerCase();
-        var sims = {
-            aid: {
-                name: 'Transparent Aid Rails',
-                steps: [
-                    'Initializing aid disbursement contract...',
-                    'Deploying on testnet...',
-                    'Simulating $50,000 USDC aid package...',
-                    'Routing to 250 verified recipients...',
-                    'Processing micro-disbursements...',
-                    'Recording on-chain audit trail...',
-                    'Generating impact report...',
-                ],
-                result: [
-                    '',
-                    '<span class="bold">Simulation Complete</span>',
-                    '',
-                    '  Recipients:        <span class="highlight">250</span>',
-                    '  Total disbursed:   <span class="highlight">$50,000.00 USDC</span>',
-                    '  Avg per recipient: <span class="highlight">$200.00</span>',
-                    '  Settlement time:   <span class="highlight">4.2 seconds</span>',
-                    '  Total fees:        <span class="highlight">$0.37</span>',
-                    '  Transparency:      <span class="success">100% on-chain auditable</span>',
-                    '',
-                    '  <span class="dim">Traditional wire equivalent: ~$12,500 in fees, 3-5 days</span>',
-                ]
-            },
-            yield: {
-                name: 'Micro-Yield Public Goods',
-                steps: [
-                    'Connecting to yield aggregator...',
-                    'Allocating $1M idle reserves to strategy...',
-                    'Simulating 30-day yield period...',
-                    'Calculating public goods allocation...',
-                    'Distributing to verified projects...',
-                ],
-                result: [
-                    '',
-                    '<span class="bold">Simulation Complete</span>',
-                    '',
-                    '  Reserves allocated:   <span class="highlight">$1,000,000 USDC</span>',
-                    '  30-day yield:         <span class="highlight">$4,109.58</span>',
-                    '  APY:                  <span class="highlight">4.93%</span>',
-                    '  Public goods funded:  <span class="highlight">3 projects</span>',
-                    '  Impact score:         <span class="success">+847 beneficiaries</span>',
-                    '',
-                    '  <span class="dim">Zero cost to reserve holders. Pure positive externality.</span>',
-                ]
-            },
-            green: {
-                name: 'Green Commerce Incentives',
-                steps: [
-                    'Loading merchant sustainability scores...',
-                    'Configuring cashback smart contract...',
-                    'Simulating 1,000 purchase transactions...',
-                    'Calculating carbon offset equivalents...',
-                    'Generating environmental impact report...',
-                ],
-                result: [
-                    '',
-                    '<span class="bold">Simulation Complete</span>',
-                    '',
-                    '  Transactions:     <span class="highlight">1,000</span>',
-                    '  Green purchases:  <span class="highlight">623 (62.3%)</span>',
-                    '  Cashback issued:  <span class="highlight">$1,246.00 USDC</span>',
-                    '  CO2 offset equiv: <span class="highlight">3.2 tonnes</span>',
-                    '  Behavior shift:   <span class="success">+23% vs control group</span>',
-                    '',
-                    '  <span class="dim">Incentives work. Stablecoins make them instant.</span>',
-                ]
-            },
-            impact: {
-                name: 'Programmable Impact Bonds',
-                steps: [
-                    'Deploying impact bond contract...',
-                    'Setting outcome milestones...',
-                    'Locking $100,000 USDC in escrow...',
-                    'Simulating 6-month project execution...',
-                    'Verifying milestone completion via oracle...',
-                    'Triggering conditional fund release...',
-                ],
-                result: [
-                    '',
-                    '<span class="bold">Simulation Complete</span>',
-                    '',
-                    '  Bond value:          <span class="highlight">$100,000 USDC</span>',
-                    '  Milestones set:      <span class="highlight">5</span>',
-                    '  Milestones met:      <span class="highlight">4/5</span>',
-                    '  Funds released:      <span class="highlight">$82,000 USDC</span>',
-                    '  Funds returned:      <span class="highlight">$18,000 USDC</span>',
-                    '  Outcome verified:    <span class="success">On-chain oracle</span>',
-                    '',
-                    '  <span class="dim">Pay for outcomes, not promises.</span>',
-                ]
-            }
-        };
 
-        if (!sims[exp]) {
-            printLines(['<span class="error">Unknown experiment: ' + esc(exp) + '</span>', '<span class="dim">Try: aid, yield, green, impact</span>']);
+        if (exp !== 'x402' && exp !== 'x402charity' && exp !== 'charity') {
+            printLines([
+                '<span class="error">Unknown experiment: ' + esc(exp) + '</span>',
+                '<span class="dim">Currently running: </span><span class="highlight">x402</span><span class="dim"> (x402 Charity)</span>',
+            ]);
             return;
         }
 
-        var sim = sims[exp];
-        printLines(['', '<span class="bold">Running: ' + sim.name + '</span>', '']);
+        printLines(['', '<span class="bold">Running: x402 Charity Simulation</span>', '']);
+
+        var steps = [
+            'Loading x402 Charity middleware...',
+            'Connecting to x402 protocol on Base...',
+            'Resolving charity registry (charities.json)...',
+            'Registering cause: red-cross',
+            'Configuring micro-donation: $0.0001 USDC per event',
+            'Simulating 10,000 user actions across 3 apps...',
+            'Processing DEX trades... 4,200 donations triggered',
+            'Processing SaaS subscriptions... 3,100 donations triggered',
+            'Processing AI API calls... 2,700 donations triggered',
+            'Settling all donations via x402...',
+            'Recording on-chain receipts...',
+            'Generating impact report...',
+        ];
+
+        var result = [
+            '',
+            '<span class="bold">Simulation Complete</span>',
+            '',
+            '  ┌─────────────────────────────────────────────────┐',
+            '  │  <span class="bold">x402 Charity -- Impact Report</span>                  │',
+            '  ├─────────────────────────────────────────────────┤',
+            '  │                                                 │',
+            '  │  User actions processed:  <span class="highlight">10,000</span>               │',
+            '  │  Donations triggered:     <span class="highlight">10,000</span>               │',
+            '  │  Total donated:           <span class="highlight">$1.00 USDC</span>           │',
+            '  │  Avg per donation:        <span class="highlight">$0.0001</span>              │',
+            '  │  Transaction fees:        <span class="highlight">$0.00</span> <span class="dim">(gas-free)</span>     │',
+            '  │  Settlement time:         <span class="highlight">&lt; 2 seconds</span>         │',
+            '  │  User friction added:     <span class="success">None</span>                 │',
+            '  │                                                 │',
+            '  │  <span class="dim">Breakdown by source:</span>                          │',
+            '  │    DEX trades:            <span class="accent">4,200</span>  ($0.42)       │',
+            '  │    SaaS subscriptions:    <span class="accent">3,100</span>  ($0.31)       │',
+            '  │    AI API calls:          <span class="accent">2,700</span>  ($0.27)       │',
+            '  │                                                 │',
+            '  └─────────────────────────────────────────────────┘',
+            '',
+            '  <span class="dim">$1 from 10,000 actions. No one noticed. Everyone helped.</span>',
+            '  <span class="dim">Now imagine 10 million actions per day.</span>',
+        ];
 
         var i = 0;
         var interval = setInterval(function () {
-            if (i < sim.steps.length) {
-                var progress = '  <span class="success">[' + ('='.repeat(Math.floor(((i + 1) / sim.steps.length) * 20))).padEnd(20, ' ') + ']</span>  ';
-                append('<div class="response">' + progress + '<span class="dim">' + sim.steps[i] + '</span></div>');
+            if (i < steps.length) {
+                var pct = Math.floor(((i + 1) / steps.length) * 20);
+                var bar = '='.repeat(pct);
+                var space = ' '.repeat(20 - pct);
+                var progress = '  <span class="success">[' + bar + space + ']</span>  ';
+                append('<div class="response">' + progress + '<span class="dim">' + steps[i] + '</span></div>');
                 i++;
             } else {
                 clearInterval(interval);
-                printLines(sim.result);
+                printLines(result);
             }
-        }, 500);
+        }, 400);
     }
 
     function showStatus() {
@@ -579,13 +605,13 @@ document.addEventListener('DOMContentLoaded', function () {
             '',
             '  <span class="dim">Service</span>              <span class="dim">Status</span>',
             '  ──────────────────────────────────────',
-            '  Stablecoin Rails     <span class="success">operational</span>',
-            '  Impact Metrics       <span class="success">operational</span>',
-            '  Smart Contracts      <span class="success">operational</span>',
-            '  Compliance Layer     <span class="success">operational</span>',
-            '  Experiment Runner    <span class="success">operational</span>',
-            '  Testnet Nodes        <span class="success">operational</span>',
+            '  x402 Protocol        <span class="success">operational</span>',
+            '  Charity Registry     <span class="success">operational</span>',
+            '  USDC on Base         <span class="success">operational</span>',
+            '  Middleware (npm)      <span class="success">operational</span>',
+            '  AllScale Core        <span class="success">operational</span>',
             '',
+            '  <span class="dim">Active experiments:</span>   <span class="highlight">1</span> <span class="dim">(x402 Charity)</span>',
             '  <span class="dim">All systems nominal.</span>  <span class="highlight">Uptime: 99.97%</span>',
         ]);
     }
@@ -605,6 +631,7 @@ document.addEventListener('DOMContentLoaded', function () {
             '<span class="bold">Contact AllScale Lab</span>',
             '',
             '  <span class="highlight">GitHub</span>     github.com/allscale-io',
+            '  <span class="highlight">x402</span>       github.com/allscale-io/x402charity',
             '  <span class="highlight">Parent</span>     allscale.io',
             '',
             '  <span class="dim">We\'re looking for collaborators -- researchers, NGOs,</span>',
@@ -623,10 +650,10 @@ document.addEventListener('DOMContentLoaded', function () {
             '<span class="ascii-art">   / ___ \\| | |___) | (_| (_| | |  __/</span>  <span class="highlight">Parent:</span>     AllScale',
             '<span class="ascii-art">  /_/   \\_\\_|_|____/ \\___\\__,_|_|\\___|</span>  <span class="highlight">Focus:</span>      Stablecoin R&D',
             '<span class="ascii-art">              <span class="accent">L  A  B</span></span>                    <span class="highlight">Mission:</span>    Positive externalities',
-            '                                       <span class="highlight">Stack:</span>      Solidity, EVM, APIs',
-            '                                       <span class="highlight">Chains:</span>     Multi-chain',
-            '                                       <span class="highlight">License:</span>    Open Source',
-            '                                       <span class="highlight">Experiments:</span> 5 active',
+            '                                       <span class="highlight">Experiment:</span> x402 Charity',
+            '                                       <span class="highlight">Chain:</span>      Base (USDC)',
+            '                                       <span class="highlight">Protocol:</span>   x402',
+            '                                       <span class="highlight">License:</span>    MIT / Open Source',
             '                                       <span class="highlight">Status:</span>     <span class="success">Online</span>',
             '',
         ]);
@@ -653,12 +680,11 @@ document.addEventListener('DOMContentLoaded', function () {
         var bootLines = [
             '<span class="dim">[    0.000] AllScale Lab kernel loading...</span>',
             '<span class="dim">[    0.012] Initializing stablecoin runtime...</span>',
-            '<span class="dim">[    0.034] Loading experiment modules...</span>',
-            '<span class="dim">[    0.051] Connecting to chain adapters... <span class="success">OK</span></span>',
-            '<span class="dim">[    0.067] Impact metrics engine... <span class="success">OK</span></span>',
-            '<span class="dim">[    0.089] Smart contract layer... <span class="success">OK</span></span>',
-            '<span class="dim">[    0.102] Compliance checks... <span class="success">PASS</span></span>',
-            '<span class="dim">[    0.118] All systems nominal.</span>',
+            '<span class="dim">[    0.034] Loading experiment: x402 Charity...</span>',
+            '<span class="dim">[    0.051] Connecting to x402 protocol... <span class="success">OK</span></span>',
+            '<span class="dim">[    0.067] Charity registry loaded... <span class="success">OK</span></span>',
+            '<span class="dim">[    0.089] USDC on Base... <span class="success">OK</span></span>',
+            '<span class="dim">[    0.102] All systems nominal.</span>',
             '',
         ];
 
@@ -676,13 +702,12 @@ document.addEventListener('DOMContentLoaded', function () {
             '',
             '  Welcome to <span class="bold">AllScale Lab</span>.',
             '',
-            '  This is an interactive terminal.',
-            '  Explore our research, run experiment simulations,',
-            '  and learn what we\'re building.',
+            '  We\'re currently running one experiment:',
+            '  <span class="success">[ACTIVE]</span> <span class="bold">x402 Charity</span> <span class="dim">-- programmable micro-donations</span>',
             '',
             '  <span class="dim">Type</span> <span class="highlight">help</span> <span class="dim">to get started.</span>',
-            '  <span class="dim">Type</span> <span class="highlight">experiments</span> <span class="dim">to see what we\'re working on.</span>',
-            '  <span class="dim">Type</span> <span class="highlight">run aid</span> <span class="dim">to simulate an experiment.</span>',
+            '  <span class="dim">Type</span> <span class="highlight">x402</span> <span class="dim">for the technical deep-dive.</span>',
+            '  <span class="dim">Type</span> <span class="highlight">run x402</span> <span class="dim">to simulate the experiment.</span>',
             '',
         ];
 
