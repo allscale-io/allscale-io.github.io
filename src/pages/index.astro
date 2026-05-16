@@ -1,0 +1,32 @@
+---
+import { getCollection } from 'astro:content';
+import EcosystemDirectory from '../components/EcosystemDirectory.jsx';
+import '../styles/global.css';
+
+const all = await getCollection('entries');
+const entries = all.map((e) => ({ slug: e.slug, ...e.data }));
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AllScale Ecosystem — labs.allscale.io</title>
+    <meta
+      name="description"
+      content="The ecosystem built on AllScale — every place you can use stablecoin payments, payouts, and the APIs that power them."
+    />
+    <link rel="icon" href="/allscale-logo.png" type="image/png" />
+    <meta property="og:title" content="AllScale Ecosystem" />
+    <meta
+      property="og:description"
+      content="Stablecoin payments, payouts, and the APIs that power them — everywhere your customers already are."
+    />
+    <meta property="og:url" content="https://labs.allscale.io" />
+    <meta property="og:type" content="website" />
+  </head>
+  <body>
+    <EcosystemDirectory entries={entries} client:load />
+  </body>
+</html>
