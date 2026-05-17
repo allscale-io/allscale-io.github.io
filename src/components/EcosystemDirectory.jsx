@@ -226,7 +226,9 @@ function POSModal({ onClose }) {
           ))}
         </ul>
         <a
-          href={`mailto:${SUBMIT_EMAIL}?subject=AllScale%20POS%20enquiry`}
+          href="https://stablepos.xyz"
+          target="_blank"
+          rel="noopener"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -242,7 +244,39 @@ function POSModal({ onClose }) {
             textDecoration: 'none',
           }}
         >
-          Email {SUBMIT_EMAIL}
+          Visit stablepos.xyz
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M7 17L17 7M9 7h8v8" />
+          </svg>
+        </a>
+        <a
+          href={`mailto:${SUBMIT_EMAIL}?subject=AllScale%20POS%20enquiry`}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 6,
+            marginTop: 10,
+            height: 44,
+            background: 'transparent',
+            color: '#0C3124',
+            border: '1px solid #E5EEEA',
+            borderRadius: 999,
+            fontSize: 14,
+            fontWeight: 500,
+            textDecoration: 'none',
+          }}
+        >
+          Or email {SUBMIT_EMAIL}
         </a>
       </div>
     </div>

@@ -15,11 +15,11 @@ type:
 status: Live
 built_by: AllScale
 primary:
-  label: Install in Claude Code
-  url: https://github.com/allscale-io/allscale-checkout-skill
+  label: Learn more
+  url: /checkout-skill
 secondary:
   label: View on GitHub
-  url: '#'
+  url: https://github.com/allscale-io/allscale-checkout-skill
 featured: true
 sort_order: 40
 launch_date: '2026-04-12'
