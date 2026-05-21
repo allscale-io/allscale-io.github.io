@@ -19,6 +19,25 @@ export function LogoTelegram({ size = 56 }) {
   );
 }
 
+export function LogoWordPress({ size = 56 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 56 56" aria-hidden>
+      <circle cx="28" cy="28" r="28" fill="#21759B" />
+      <circle cx="28" cy="28" r="22" fill="none" stroke="#FFFFFF" strokeWidth="2" />
+      <g
+        fill="#FFFFFF"
+        fontFamily="Archivo, sans-serif"
+        fontWeight="700"
+        fontSize="22"
+        textAnchor="middle"
+        letterSpacing="-1.2"
+      >
+        <text x="28" y="36">W</text>
+      </g>
+    </svg>
+  );
+}
+
 export function LogoWooCommerce({ size = 56 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 56 56" aria-hidden>
@@ -110,6 +129,7 @@ export function LogoX402({ size = 56 }) {
 
 const LOGOS = {
   telegram: LogoTelegram,
+  wordpress: LogoWordPress,
   woocommerce: LogoWooCommerce,
   claude: LogoClaude,
   solana: LogoSolana,

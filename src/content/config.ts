@@ -4,7 +4,7 @@ const entries = defineCollection({
   type: 'content',
   schema: z.object({
     name: z.string(),
-    logo_key: z.enum(['woocommerce', 'telegram', 'pos', 'claude', 'solana', 'x402']),
+    logo_key: z.enum(['wordpress', 'woocommerce', 'telegram', 'pos', 'claude', 'solana', 'x402']),
     one_liner: z.string(),
     long_description: z.string(),
     surface: z.array(z.string()).min(1),

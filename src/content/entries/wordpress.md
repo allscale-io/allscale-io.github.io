@@ -1,6 +1,6 @@
 ---
 name: AllScale for WordPress
-logo_key: woocommerce
+logo_key: wordpress
 one_liner: Accept stablecoin payments on your WordPress store.
 long_description: >-
   Drop-in plugin for WooCommerce. Adds USDT and USDC checkout alongside

@@ -77,9 +77,8 @@
   .topnav{position:sticky;top:0;z-index:100;background:rgba(253,255,254,0.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:border-color .2s;}
   .topnav.scrolled{border-bottom-color:var(--border);}
   .topnav-inner{display:flex;align-items:center;justify-content:space-between;height:72px;}
-  .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);}
-  .brand-mark{width:32px;height:32px;display:block;}
-  .brand-wordmark{font-size:20px;font-weight:600;letter-spacing:-0.02em;}
+  .brand{display:flex;align-items:center;text-decoration:none;color:var(--text);}
+  .brand-mark{height:24px;width:auto;display:block;}
   .topnav-links{display:flex;align-items:center;gap:8px;}
   .topnav-link{padding:9px 14px;border-radius:999px;font-size:15px;font-weight:500;color:var(--text);text-decoration:none;transition:background .15s;}
   .topnav-link:hover{background:var(--surface2);color:var(--text);}
@@ -154,7 +153,7 @@
   .ck-method{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--accent-light);border:1.5px solid var(--accent);border-radius:14px;margin-bottom:12px;position:relative;}
   .ck-method-radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
   .ck-method-radio::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);}
-  .ck-method-logo{width:28px;height:28px;}
+  .ck-method-logo{height:14px;width:auto;display:block;}
   .ck-method-text{flex:1;}
   .ck-method-title{font-size:14px;font-weight:500;color:var(--text);}
   .ck-method-sub{font-size:11px;color:var(--text2);font-family:var(--font-mono);}
@@ -354,8 +353,7 @@
 <header class="topnav" id="topnav">
   <div class="wrap topnav-inner">
     <a class="brand" href="/">
-      <img class="brand-mark" src="/wordpress/allscale-mark.png" alt="Allscale" />
-      <span class="brand-wordmark">Allscale</span>
+      <img class="brand-mark" src="/allscale-logo.svg" alt="AllScale" />
     </a>
     <nav class="topnav-links">
       <a class="topnav-link hide-sm" href="#pricing">Pricing</a>
@@ -425,7 +423,7 @@
           <div class="ck-eyebrow">Payment method</div>
           <div class="ck-method">
             <div class="ck-method-radio"></div>
-            <img class="ck-method-logo" src="/wordpress/allscale-mark.png" alt="" />
+            <img class="ck-method-logo" src="/allscale-logo.svg" alt="" />
             <div class="ck-method-text">
               <div class="ck-method-title">Pay with Crypto (Allscale)</div>
               <div class="ck-method-sub">USDT · settles to your wallet</div>
@@ -691,8 +689,7 @@
     <div class="foot-grid">
       <div class="foot-brand">
         <a class="brand" href="/">
-          <img class="brand-mark" src="/wordpress/allscale-mark.png" alt="Allscale" />
-          <span class="brand-wordmark">Allscale</span>
+          <img class="brand-mark" src="/allscale-logo.svg" alt="AllScale" />
         </a>
         <p>Stablecoin payments infrastructure for the open web. Non-custodial, on-chain, priced like wallet-to-wallet.</p>
       </div>
