@@ -1,5 +1,5 @@
 ---
-name: AllScale for WooCommerce
+name: AllScale for WordPress
 logo_key: woocommerce
 one_liner: Accept stablecoin payments on your WordPress store.
 long_description: >-
@@ -15,11 +15,11 @@ type:
 status: Live
 built_by: AllScale
 primary:
-  label: Install plugin
-  url: https://github.com/allscale-io/allscale-checkout-woocommerce
+  label: Learn more
+  url: /wordpress
 secondary:
-  label: Read docs
-  url: '#'
+  label: GitHub
+  url: https://github.com/allscale-io/allscale-checkout-woocommerce
 featured: true
 sort_order: 10
 launch_date: '2026-03-10'
