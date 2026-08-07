@@ -1,7 +1,7 @@
 ---
 name: AllScale Agentic Commerce Gateway
 logo_key: gateway
-one_liner: Live on HashKey Chain mainnet — signed, spend-capped agent checkout.
+one_liner: Live on HSK Chain mainnet — signed, spend-capped agent checkout.
 long_description: >-
   SettlementGateway is deployed on HashKey Chain mainnet (chain 177) against
   bridged USDC.e — no mock tokens. EIP-712 signatures over exact payment terms,
