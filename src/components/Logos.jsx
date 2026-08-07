@@ -127,6 +127,21 @@ export function LogoX402({ size = 56 }) {
   );
 }
 
+export function LogoGateway({ size = 56 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 56 56" aria-hidden>
+      <rect width="56" height="56" rx="14" fill="#0C3124" />
+      <circle cx="28" cy="28" r="16" fill="#12D16B" />
+      <circle cx="28" cy="28" r="13.2" fill="#FFFFFF" />
+      <circle cx="28" cy="24.5" r="4.1" fill="#0C3124" />
+      <path
+        d="M26.33 26.94 L24.83 34.6 A0.8 0.8 0 0 0 25.62 35.57 H30.38 A0.8 0.8 0 0 0 31.17 34.6 L29.67 26.94 Z"
+        fill="#0C3124"
+      />
+    </svg>
+  );
+}
+
 const LOGOS = {
   telegram: LogoTelegram,
   wordpress: LogoWordPress,
@@ -135,6 +150,7 @@ const LOGOS = {
   solana: LogoSolana,
   pos: LogoPOS,
   x402: LogoX402,
+  gateway: LogoGateway,
 };
 
 export function Logo({ k, size }) {
