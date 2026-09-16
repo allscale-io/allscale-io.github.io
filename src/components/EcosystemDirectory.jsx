@@ -66,13 +66,25 @@ function Card({ entry, onPOS }) {
   return (
     <div
       className={'dirB-card' + (entry.status === 'Experiment' ? ' experiment' : '')}
+      role="button"
+      tabIndex="0"
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (entry.primary?.modal === 'pos' && onPOS) {
+            onPOS();
+            return;
+          }
+          if (entry.primary?.url) window.open(entry.primary.url, '_blank', 'noopener,noreferrer');
+        }
+      }}
       onClick={(e) => {
         if (entry.primary?.modal === 'pos' && onPOS) {
           e.preventDefault();
           onPOS();
           return;
         }
-        if (entry.primary?.url) window.open(entry.primary.url, '_blank', 'noopener');
+        if (entry.primary?.url) window.open(entry.primary.url, '_blank', 'noopener,noreferrer');
       }}
     >
       <div className="dirB-card-top">
@@ -228,7 +240,7 @@ function POSModal({ onClose }) {
         <a
           href="https://stablepos.xyz"
           target="_blank"
-          rel="noopener"
+          rel="noopener noreferrer"
           style={{
             display: 'flex',
             alignItems: 'center',
